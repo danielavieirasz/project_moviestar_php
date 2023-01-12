@@ -1,3 +1,29 @@
-body{
-    background-color: #CCC;
+/*Navbar */
+.navbar-brand{
+    position: relative;
+}
+
+#logo{
+    width: 50px;
+}
+
+#moviestar-title{
+    color: #FFF;
+    position: absolute;
+    bottom: -2px;
+    font-size: 30px;
+    left: 55px;
+    font-weight: bold;
+}
+
+#main-navbar{
+    background-color: #121212;
+}
+
+#search-form{
+    margin: 0 auto;
+    background-color: #FFF;
+    border-radius: 5px;
+    width: 50%;
+    margin-left: 180px;
 }
