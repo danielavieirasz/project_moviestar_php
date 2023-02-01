@@ -2,10 +2,10 @@
 
 require_once("models/User.php");
 
- class UserDAO implements UserDAOInterface{
+class UserDAO implements UserDAOInterface {
 
-    $private $conn;
-    $private $url;
+  private $conn;
+  private $url;
 
     public function __construct(PDO $conn, $url) {
         $this->conn = $conn;
@@ -13,7 +13,19 @@ require_once("models/User.php");
     }
 
     public function buildUser($data) {
-        /* CONTINUAÇÃO AQUI*/
+  
+        $user = new User();
+
+      $user->id = $data["id"];
+      $user->name = $data["name"];
+      $user->lastname = $data["lastname"];
+      $user->email = $data["email"];
+      $user->password = $data["password"];
+      $user->image = $data["image"];
+      $user->bio = $data["bio"];
+      $user->token = $data["token"];
+
+      return $user;
     }
 
     public function create(User $user, $authUser = false) {

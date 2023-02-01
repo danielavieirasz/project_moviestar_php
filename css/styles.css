@@ -70,11 +70,11 @@
     text-align: center;
 }
 
-.msg.error{
+.msg.error {
     color: #842029;
     background-color: #F8D7DA;
-    border-color: #f5c2c7;
-}
+    border-color: #F5C2C7;
+  }
 
 .msg.success{
     color: #0f5132;
