@@ -8,6 +8,8 @@ require_once("dao/UserDAO.php");
 
 $message = new Message($BASE_URL);
 
+$userDao = new UserDAO($conn, $BASE_URL);
+
 // Resgata o tipo de formulário
 $type = filter_input(INPUT_POST, "type");
 
@@ -22,7 +24,26 @@ if($type === "register"){
 
     // Verificação de dados minímos
     if($name && $lastname && $email && $password){
+        
+        // Verificar se as senhas batem
+        if($password === $confirmpassword){
 
+            //Verificar se o e-mail já esta cadastrado no sistema
+            if($userDao->findByEmail($email) === false){
+
+            
+
+            } else{
+
+                // Enviar mensagem de erro, usuario ja cadastrado
+                $message->setMessage("Usuário já cadastrado, tente outro e-mail.","error","back");
+            }
+
+        } else {
+
+        // Enviar mensagem de erro caso as senhas não batam        
+         $message->setMessage("As senhas não são iguais.", "error", "back");
+        }
 
     } else {
 
@@ -31,7 +52,5 @@ if($type === "register"){
 
     }
 } else if($type === "login"){
-
+    
 }
-
-
