@@ -34,23 +34,23 @@ class UserDAO implements UserDAOInterface {
     public function create(User $user, $authUser = false) {
 
       $stmt = $this->conn->prepare("INSERT INTO users(
-        name, lastname, email, password, token
+          name, lastname, email, password, token
         ) VALUES (
           :name, :lastname, :email, :password, :token
         )");
 
-        $stmt->bindParam(":name", $user->name);
-        $stmt->bindParam(":lastname", $user->lastname);
-        $stmt->bindParam(":email", $user->email);
-        $stmt->bindParam(":password", $user->password);
-        $stmt->bindParam(":token", $user->token);
+      $stmt->bindParam(":name", $user->name);
+      $stmt->bindParam(":lastname", $user->lastname);
+      $stmt->bindParam(":email", $user->email);
+      $stmt->bindParam(":password", $user->password);
+      $stmt->bindParam(":token", $user->token);
 
-        $stmt->execute();
+      $stmt->execute();
 
-        // Autenticar usuário, caso auth seja true
-          if($authUser){
-            $this->setTokenToSession($user->token);
-          }
+         // Autenticar usuário, caso auth seja true
+      if($authUser) {
+        $this->setTokenToSession($user->token);
+      }
     }
 
     public function update(User $user) {
@@ -58,6 +58,26 @@ class UserDAO implements UserDAOInterface {
     }
 
     public function verifyToken($protected =false) {
+
+      if(!empty($_SESSION["token"])){
+
+        // pega o token da session
+        $token = $_SESSION["token"];
+
+        $user = $this->findByToken($token);
+
+        if($user){          
+          return $user;
+          
+        }else {
+                  //Redireciona  usuario não autenticado
+        $this->message->setMessage("Faça a autentificação para acessar esta pagina", "error","index.php");
+
+        }
+
+      } else{
+        return false;
+      }
 
     }
     public function setTokenToSession($token, $redirect= true) {
@@ -109,6 +129,28 @@ class UserDAO implements UserDAOInterface {
     }
 
     public function findByToken($token) {
+      if($token != ""){
+
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE token = :token");
+
+        $stmt->bindParam(":token", $token);
+
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+
+          $data = $stmt->fetch();
+          $user = $this->buildUser($data);
+
+          return $user;
+
+        } else {
+          return false;
+        }
+
+      } else {
+        return false;
+      }
 
     }
 
