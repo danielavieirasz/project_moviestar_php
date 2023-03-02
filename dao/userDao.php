@@ -67,23 +67,24 @@ class UserDAO implements UserDAOInterface {
         $user = $this->findByToken($token);
 
         if($user){          
-          return $user;
-          
-        }else {
+          return $user;          
+        }else if($protected) {
                   //Redireciona  usuario não autenticado
         $this->message->setMessage("Faça a autentificação para acessar esta pagina", "error","index.php");
 
         }
 
-      } else{
-        return false;
-      }
+      }else if($protected) {
+        //Redireciona  usuario não autenticado
+$this->message->setMessage("Faça a autentificação para acessar esta pagina", "error","index.php");
+
+}
 
     }
     public function setTokenToSession($token, $redirect= true) {
 
       //Salvar token na session
-      $_SESSION["token"] =$token;
+      $_SESSION["token"] = $token;
 
       if($redirect){
 
@@ -151,6 +152,16 @@ class UserDAO implements UserDAOInterface {
       } else {
         return false;
       }
+
+    }
+
+    public function destroyToken(){
+
+      // Remove o token da session
+      $_SESSION["token"] = "";
+
+      //Redireciona e apresenta mensagem de sucesso
+      $this->message->setMessage("Você fez o logout com sucesso!","success","index.php");
 
     }
 
